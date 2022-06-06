@@ -13,76 +13,12 @@
 %token PRINTFF SCANFF INT FLOAT CHAR VOID RETURN FOR IF ELSE TRUE FALSE INTEGER FLOAT_NUM VARIABLE UNARY LE GE EQ NE GT LT AND OR ADD SUBTRACT DIVIDE MULTIPLY STR CHARACTER INCLUDE OBR CBR SEMIC OCBR CCBR AMPERSANT COMMA ASSIGN
 
 %%
-codeflow: header maintype OBR CBR OCBR body return CCBR
+codeflow: header maintype '(' ')' '{' body return '}'
 ;
 
 header: header header
 | INCLUDE
-;
-
-body: loop
-| ifstatement
-| condition
-| assignment
-| print
-| scan
-| body body
-;
-
-return: RETURN value SEMIC
-;
-
-loop: FOR OBR assignment SEMIC condition SEMIC assignment CBR OCBR body CCBR
-;
-
-ifstatement: IF OBR condition CBR OCBR body CCBR else
-;
-
-else: ELSE OCBR body CCBR
 |
-;
-
-condition: value comparison value
-| TRUE
-| FALSE
-;
-
-comparison : LT
-| GT
-| LE
-| GE
-| EQ
-| NE
-;
-
-value: INTEGER
-| FLOAT_NUM
-| CHARACTER
-| VARIABLE
-;
-
-assignment: datatype VARIABLE ASSIGN value
-| VARIABLE ASSIGN arithmetic expression
-| VARIABLE comparison expression
-| VARIABLE UNARY
-| UNARY VARIABLE
-;
-
-arithmetic: ADD 
-| SUBTRACT 
-| MULTIPLY
-| DIVIDE
-;
-
-expression: expression arithmetic expression
-| value
-;
-
-
-print: PRINTFF OBR STR CBR SEMIC
-;
-
-scan: SCANFF OBR STR COMMA AMPERSANT VARIABLE CBR SEMIC
 ;
 
 maintype: datatype VARIABLE
@@ -94,6 +30,70 @@ datatype: INT
 | VOID
 ;
 
+body: loop
+| ifstatement
+| assignment
+| print
+| scan
+| body body
+;
+
+loop: FOR OBR assignment SEMIC condition SEMIC assignment CBR OCBR body CCBR
+;
+
+ifstatement: IF OBR condition CBR OCBR body CCBR else
+;
+
+condition: value comparison value
+| TRUE
+| FALSE
+;
+
+else: ELSE OCBR body CCBR
+|
+;
+
+assignment: datatype VARIABLE ASSIGN value
+| VARIABLE ASSIGN arithmetic expression
+| VARIABLE comparison expression
+| VARIABLE UNARY
+| UNARY VARIABLE
+;
+
+comparison : LT
+| GT
+| LE
+| GE
+| EQ
+| NE
+;
+
+print: PRINTFF OBR STR CBR SEMIC
+;
+
+scan: SCANFF OBR STR COMMA AMPERSANT VARIABLE CBR SEMIC
+;
+
+return: RETURN value SEMIC
+
+;
+
+value: INTEGER
+| FLOAT_NUM
+| CHARACTER
+| VARIABLE
+;
+
+expression: expression arithmetic expression
+| value
+;
+
+arithmetic: ADD 
+| SUBTRACT 
+| MULTIPLY
+| DIVIDE
+;
+
 %%
 
 int main() {
@@ -103,4 +103,3 @@ int main() {
 void yyerror(const char* msg) {
     fprintf(stderr, "%s\n", msg);
 }
-
