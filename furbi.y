@@ -4,24 +4,25 @@
     #include<stdlib.h>
     #include<ctype.h>
     #include"lex.yy.c"
-    
+
     void yyerror(const char *s);
     int yylex();
     int yywrap();
+    void yyerror(const char *s);
 %}
 
-%token PRINTFF SCANFF INT FLOAT CHAR VOID RETURN FOR IF ELSE TRUE FALSE INTEGER FLOAT_NUM VARIABLE UNARY LE GE EQ NE GT LT AND OR ADD SUBTRACT DIVIDE MULTIPLY STR CHARACTER INCLUDE OBR CBR SEMIC OCBR CCBR AMPERSANT COMMA ASSIGN
+%token PRINTFF SCANFF INT FLOAT CHAR VOID RETURN FOR IF ELSE TRUE FALSE INTEGER FLOAT_NUM VARIABLE UNARY LE GE EQ NE GT LT AND OR ADD SUBTRACT DIVIDE MULTIPLY STR CHARACTER INCLUDE
 
 %%
-codeflow: header maintype '(' ')' '{' body return '}'
+
+result: codeflow { printf("\nACCEPTED\n"); exit(0); }
+
+codeflow: header datatype VARIABLE '(' ')' '{' body return '}'
 ;
 
 header: header header
 | INCLUDE
 |
-;
-
-maintype: datatype VARIABLE
 ;
 
 datatype: INT
@@ -32,16 +33,26 @@ datatype: INT
 
 body: loop
 | ifstatement
-| assignment
+| assignment ';'
 | print
 | scan
 | body body
 ;
 
-loop: FOR OBR assignment SEMIC condition SEMIC assignment CBR OCBR body CCBR
+loop: FOR '(' assignment ';' condition ';' assignment ')' '{' body '}'
 ;
 
-ifstatement: IF OBR condition CBR OCBR body CCBR else
+ifstatement: IF '(' condition ')' '{' body '}' else
+;
+
+else: ELSE '{' body '}'
+|
+;
+
+print: PRINTFF '(' STR ')' ';'
+;
+
+scan: SCANFF '(' STR ',' '&' VARIABLE ')' ';'
 ;
 
 condition: value comparison value
@@ -49,15 +60,22 @@ condition: value comparison value
 | FALSE
 ;
 
-else: ELSE OCBR body CCBR
-|
-;
-
-assignment: datatype VARIABLE ASSIGN value
-| VARIABLE ASSIGN arithmetic expression
+assignment: datatype VARIABLE
+| datatype VARIABLE '=' value
+| VARIABLE '=' arithmetic expression
 | VARIABLE comparison expression
 | VARIABLE UNARY
 | UNARY VARIABLE
+;
+
+expression: expression arithmetic expression
+| value
+;
+
+arithmetic: ADD
+| SUBTRACT
+| MULTIPLY
+| DIVIDE
 ;
 
 comparison : LT
@@ -68,36 +86,22 @@ comparison : LT
 | NE
 ;
 
-print: PRINTFF OBR STR CBR SEMIC
-;
-
-scan: SCANFF OBR STR COMMA AMPERSANT VARIABLE CBR SEMIC
-;
-
-return: RETURN value SEMIC
-
-;
-
 value: INTEGER
 | FLOAT_NUM
 | CHARACTER
 | VARIABLE
 ;
 
-expression: expression arithmetic expression
-| value
+return: RETURN value ';'
+|
 ;
 
-arithmetic: ADD 
-| SUBTRACT 
-| MULTIPLY
-| DIVIDE
-;
 
 %%
 
 int main() {
     yyparse();
+    return yylex();
 }
 
 void yyerror(const char* msg) {
