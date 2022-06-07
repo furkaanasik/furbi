@@ -1,5 +1,5 @@
 /* DECLARATIONS */
-%{  
+%{
 	#include"furbi.tab.h"
 %}
 
@@ -12,7 +12,7 @@ unary "++"|"--"
 /* RULES */
 %%
 "print"                    		{ return PRINTFF; }
-"sscancan"                     	{ return SCANFF; }
+"scan"                      	{ return SCANFF; }
 "int"                      		{ return INT; }
 "dotnum"                     	{ return FLOAT; }
 "char"                      	{ return CHAR; }
@@ -41,22 +41,39 @@ unary "++"|"--"
 "/"                         	{ return DIVIDE; }
 "*"                         	{ return MULTIPLY; }
 \/\/.*                      	{ ; }
-\/\*(.*\n)*.*\*\/           	{ ; } 
+\/\*(.*\n)*.*\*\/           	{ ; }
 [ \t]*                      	{ ; }
 .                     			{ return *yytext; }
 ["].*["]                    	{ return STR; }
 ['].[']                     	{ return CHARACTER; }
-"(" 							{ return OBR;}
-")" 							{ return CBR;}
-";"								{ return SEMIC;}
-"{"								{ return OCBR; }
-"}"								{ return CCBR; }
-"&"								{ return AMPERSANT; }
-","								{ return COMMA; }
-"="								{ return ASSIGN; }
 %%
 
 /* SUBROUTINES */
 int yywrap() {
     return 1;
 }
+
+
+/*
+C:\Users\binay\Desktop\Furbi>flex furbi.l
+
+C:\Users\binay\Desktop\Furbi>bison -d furbi.y
+furbi.y: çelişkiler: 21 öteleme/indirgeme, 5 indirgeme/indirgeme
+
+C:\Users\binay\Desktop\Furbi>gcc -o furbi.exe furbi.tab.c
+
+C:\Users\binay\Desktop\Furbi>furbi.exe
+int main(){
+
+if(5 < 10) {
+
+print("five is less than ten");
+
+}
+
+comeback 0;
+
+}
+
+ACCEPTED
+*/
