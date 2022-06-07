@@ -8,7 +8,6 @@
     void yyerror(const char *s);
     int yylex();
     int yywrap();
-    void yyerror(const char *s);
 %}
 
 %token PRINTFF SCANFF INT FLOAT CHAR VOID RETURN FOR IF ELSE TRUE FALSE INTEGER FLOAT_NUM VARIABLE UNARY LE GE EQ NE GT LT AND OR ADD SUBTRACT DIVIDE MULTIPLY STR CHARACTER INCLUDE
@@ -50,6 +49,7 @@ else: ELSE '{' body '}'
 ;
 
 print: PRINTFF '(' STR ')' ';'
+| PRINTFF '(' expression ')' ';'
 ;
 
 scan: SCANFF '(' STR ',' '&' VARIABLE ')' ';'
