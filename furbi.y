@@ -10,7 +10,9 @@
     int yywrap();
 %}
 
-%token PRINTFF SCANFF INT FLOAT CHAR VOID RETURN FOR IF ELSE TRUE FALSE INTEGER FLOAT_NUM VARIABLE UNARY LE GE EQ NE GT LT AND OR ADD SUBTRACT DIVIDE MULTIPLY STR CHARACTER INCLUDE
+%token PRINTFF SCANFF INT FLOAT CHAR VOID RETURN FOR IF ELSE TRUE FALSE INTEGER FLOAT_NUM VARIABLE UNARY LE GE EQ NE GT LT AND OR ADD SUBTRACT DIVIDE MULTIPLY STR CHARACTER INCLUDE TEXT
+
+%start result
 
 %%
 
@@ -28,6 +30,7 @@ datatype: INT
 | FLOAT
 | CHAR
 | VOID
+| TEXT
 ;
 
 body: loop
@@ -56,6 +59,9 @@ scan: SCANFF '(' STR ',' '&' VARIABLE ')' ';'
 ;
 
 condition: value comparison value
+| VARIABLE comparison VARIABLE
+| VARIABLE comparison value
+| value comparison VARIABLE
 | TRUE
 | FALSE
 ;
@@ -90,6 +96,7 @@ value: INTEGER
 | FLOAT_NUM
 | CHARACTER
 | VARIABLE
+| STR
 ;
 
 return: RETURN value ';'
@@ -101,7 +108,6 @@ return: RETURN value ';'
 
 int main() {
     yyparse();
-    return yylex();
 }
 
 void yyerror(const char* msg) {

@@ -16,6 +16,7 @@ unary "++"|"--"
 "int"                      		{ return INT; }
 "dotnum"                     	{ return FLOAT; }
 "char"                      	{ return CHAR; }
+"text"							{ return TEXT;}
 "blank"                      	{ return VOID; }
 "comeback"                    	{ return RETURN; }
 "loop"                     		{ return FOR; }
@@ -25,7 +26,7 @@ unary "++"|"--"
 "true"                      	{ return TRUE; }
 "false"                     	{ return FALSE; }
 {digit}+                		{ return INTEGER; }
-{digit}+\.{digit}  				{ return FLOAT_NUM; }
+{digit}+\.{digit}+  			{ return FLOAT_NUM; }
 {alpha}({alpha}|{digit})*   	{ return VARIABLE; }
 {unary}                     	{ return UNARY; }
 "<="                        	{ return LE; }
@@ -52,28 +53,3 @@ unary "++"|"--"
 int yywrap() {
     return 1;
 }
-
-
-/*
-C:\Users\binay\Desktop\Furbi>flex furbi.l
-
-C:\Users\binay\Desktop\Furbi>bison -d furbi.y
-furbi.y: çelişkiler: 21 öteleme/indirgeme, 5 indirgeme/indirgeme
-
-C:\Users\binay\Desktop\Furbi>gcc -o furbi.exe furbi.tab.c
-
-C:\Users\binay\Desktop\Furbi>furbi.exe
-int main(){
-
-if(5 < 10) {
-
-print("five is less than ten");
-
-}
-
-comeback 0;
-
-}
-
-ACCEPTED
-*/
