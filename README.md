@@ -55,6 +55,37 @@ It was built with the furbi flex and bison programming languages.
 - `‘sample < furbi.fb’`
 
 ## Sample Program - furbi.fb
-`fafa`
+```
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+	int a = 0;
+	int b = 3;
+	dotnum c = 3.4;
+	char d = 'f';
+	text e = "furbi";
+	blank f;
+
+	if(a > b)
+	{
+		print("a bigger than b.");
+	}
+
+	else
+	{
+		print("b bigger than a.");
+	}
+
+	loop(int i = 0; i < b; i++)
+	{
+		print("furbi");
+	}
+
+	comeback 0;
+}
+
+```
 
 
