@@ -30,7 +30,7 @@ It was built with the furbi flex and bison programming languages.
 ### Include
 - ***'#include <STR.h>’*  e.g**
 	- `#include <stdio.h>`
-	- #include <stdlib.h>
+	- `#include <stdlib.h>`
 
 ### Condition
 - ***‘if’* e.g.**
